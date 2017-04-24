@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Estadísticas Github</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
+      <div>
+        <h1>Estadísticas Github</h1>
+        <hr />
+        <p class="lead">Use this document as a way to quickly start any new project.<br> All you get is this text and a mostly barebones HTML document.</p>
+      </div>
+    <form method="GET">{% csrf_token %}
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                <input type="text" name="country" id="country" class="form-control" placeholder="Busque por un país...">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="submit">Buscar</button>
+                </span>
+                </div><!-- /input-group -->
+            </div><!-- /.col-lg-6 -->
+        </div><!-- /.row -->
+    </form>
+    <hr />
+    {% if  country %}
+    <div class="panel panel-default">
+        <!-- Default panel contents -->
+        <div class="panel-heading">10 repositorios más populares de {{ country }}</div>
+
+        <!-- Table -->
+        <table class="table"> 
+                <thead> 
+                    <tr> 
+                        <th>#</th> 
+                        <th>Repositorio</th> 
+                        <th>Dueño</th> 
+                        <th>Colaboradores</th>
+                        <th>Estrellas</th>
+                    </tr> 
+                </thead> 
+                <tbody>
+                    {% if most_popular_repos %}
+                        {% for mpr in most_popular_repos %}
+                        <tr> 
+                            <th scope="row">{{ mpr.index }}</th> 
+                            <td>{{ mpr.repo }}</td> 
+                            <td>{{ mpr.username }}</td> 
+                            <td>{{ mpr.colabs }}</td>
+                            <td>{{ mpr.stars }}</td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="5">No se encontraron resultados</td>
+                        </tr>
+                    {% endif %} 
+                </tbody> 
+            </table>
+    </div>
+    <hr />
+    <div class="panel panel-default">
+        <!-- Default panel contents -->
+        <div class="panel-heading">10 repositorios con más colaboradores de {{ country }}</div>
+
+        <!-- Table -->
+        <table class="table">
+            <thead> 
+                    <tr> 
+                        <th>#</th> 
+                        <th>Repositorio</th> 
+                        <th>Dueño</th> 
+                        <th>Colaboradores</th>
+                        <th>Estrellas</th>
+                    </tr> 
+                </thead> 
+                <tbody>
+                    {% if most_popular_repos %}
+                        {% for mpr in most_collaborators_repos %}
+                        <tr> 
+                            <th scope="row">1</th> 
+                            <td>{{ mpr.repo }}</td> 
+                            <td>{{ mpr.username }}</td> 
+                            <td>{{ mpr.colabs }}</td>
+                            <td>{{ mpr.stars }}</td>
+                        </tr>
+                        {% endfor %} 
+                    {% else %}
+                        <tr>
+                            <td colspan="5">No se encontraron resultados</td>
+                        </tr>
+                    {% endif %}
+                </tbody
+        </table>
+    </div>
+    </div><!-- /.container -->
+    {% else %}
+    <div class="alert alert-info" role="alert">
+        Escriba el nombre de un país para buscar
+    </div>
+    {% endif %}
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+  </body>
+</html>
