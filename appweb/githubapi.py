@@ -11,16 +11,18 @@ class Githubapi:
     def getMostPopularReposByCountry(self, country, limit=10):
         repos = Repos.objects.filter(country=country).order_by('-stars')[:limit]
         if repos.count() == 0:
-            repos = self.getReposByCountry(country)
-            repos.sort(key=lambda x: x['stars'], reverse=True)
+            repos_tmp = self.getReposByCountry(country)
+            repos_tmp.sort(key=lambda x: x['stars'], reverse=True)
+            repos = repos_tmp[:limit]
 
         return repos
 
     def getMostCollaboratorsReposByCountry(self, country, limit=10):
         repos = Repos.objects.filter(country=country).order_by('-colabs')[:limit]
         if repos.count() == 0:
-            repos = self.getReposByCountry(country)
-            repos.sort(key=lambda x: x['colabs'], reverse=True)
+            repos_tmp = self.getReposByCountry(country)
+            repos_tmp.sort(key=lambda x: x['colabs'], reverse=True)
+            repos = repos_tmp[:limit]
         
         return repos
         
@@ -57,7 +59,6 @@ class Githubapi:
                                 colabs = 0
                                 while url_colabs:
                                     r2 = requests.get(url_colabs)
-                                    print(url_colabs)
                                     if r2.ok:
                                         if r2.text:                                        
                                             colabs = colabs + len(r2.json())
@@ -65,10 +66,8 @@ class Githubapi:
                                         item['repo'] = repo['name']
                                         item['stars'] = repo['stargazers_count']
                                         item['colabs'] = colabs
-                                        item['location'] = country
-                                        print(item)
+                                        item['country'] = country
                                         info.append(item.copy())
-                                        print(info)
                                     else:
                                         message = "Fallo obteniendo los colaboradores"
 
@@ -90,5 +89,9 @@ class Githubapi:
                 url = r.links.get('next').get('url')
             else:
                 url = False
+        
+        if len(info) > 0:
+            for re in info:
+                Repos.objects.create(username=re['username'], repo=re['repo'], stars=re['stars'], colabs=re['colabs'], country=re['country'])
 
         return info
