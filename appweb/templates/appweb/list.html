@@ -56,7 +56,7 @@
                     {% if most_popular_repos %}
                         {% for mpr in most_popular_repos %}
                         <tr> 
-                            <th scope="row">{{ mpr.index }}</th> 
+                            <th scope="row">{{ forloop.counter }}</th> 
                             <td>{{ mpr.repo }}</td> 
                             <td>{{ mpr.username }}</td> 
                             <td>{{ mpr.colabs }}</td>
@@ -88,14 +88,14 @@
                     </tr> 
                 </thead> 
                 <tbody>
-                    {% if most_popular_repos %}
-                        {% for mpr in most_collaborators_repos %}
+                    {% if most_collaborators_repos %}
+                        {% for mcr in most_collaborators_repos %}
                         <tr> 
-                            <th scope="row">1</th> 
-                            <td>{{ mpr.repo }}</td> 
-                            <td>{{ mpr.username }}</td> 
-                            <td>{{ mpr.colabs }}</td>
-                            <td>{{ mpr.stars }}</td>
+                            <th scope="row">{{ forloop.counter }}</th> 
+                            <td>{{ mcr.repo }}</td> 
+                            <td>{{ mcr.username }}</td> 
+                            <td>{{ mcr.colabs }}</td>
+                            <td>{{ mcr.stars }}</td>
                         </tr>
                         {% endfor %} 
                     {% else %}
